@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>🔑 Iniciar Sesión</h1>
+            <p>Accede a tu cuenta</p>
+        </div>
+
+        <form method="POST">
+
+            <!-- 🔥 NUEVO: TIPO DE USUARIO -->
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+    <button type="button" onclick="setTipo('paciente')" id="btnPaciente" class="btn-secondary" style="flex:1;">
+        👤 Paciente
+    </button>
+    <button type="button" onclick="setTipo('medico')" id="btnMedico" class="btn-secondary" style="flex:1;">
+        👨‍⚕️ Médico
+    </button>
+</div>
+
+<input type="hidden" name="tipo" id="tipo" value="paciente">
+
+            <!-- EMAIL -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="tu@email.com">
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-auth">Ingresar</button>
+        </form>
+
+        <div class="auth-footer">
+            ¿No tienes cuenta? <a href="{{ url_for('registro') }}">Regístrate aquí</a>
+        </div>
+    </div>
+</section>
+
+<!-- 🔥 SCRIPT PARA CAMBIAR ENTRE PACIENTE / MÉDICO -->
+<script>
+function setTipo(tipo) {
+    document.getElementById('tipo').value = tipo;
+
+    const btnPaciente = document.getElementById('btnPaciente');
+    const btnMedico = document.getElementById('btnMedico');
+
+    if (tipo === 'medico') {
+        btnMedico.classList.add('btn-primary');
+        btnPaciente.classList.remove('btn-primary');
+    } else {
+        btnPaciente.classList.add('btn-primary');
+        btnMedico.classList.remove('btn-primary');
+    }
+}
+setTipo('paciente');
+</script>
+
+{% endblock %}

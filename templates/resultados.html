@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Resultados{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 160px;">
+    <div class="section-header">
+        <h1>📊 Resultados Médicos</h1>
+        <p>Consulta tus exámenes y diagnósticos</p>
+    </div>
+    
+    <div class="cards-grid">
+        <div class="card">
+            <div class="card-icon" style="font-size: 40px;">🩸</div>
+            <h3>Hemograma Completo</h3>
+            <p>📅 Fecha: 2026-03-10</p>
+            <p style="color: #4ade80;"><strong>Estado:</strong> Disponible</p>
+            <p style="color: #94a3b8; font-size: 13px; margin-top: 15px;">
+                Laboratorio: Laboratorio Central
+            </p>
+            <button class="card-btn" style="margin-top: 15px;">📥 Descargar PDF</button>
+        </div>
+        
+        <div class="card">
+            <div class="card-icon" style="font-size: 40px;">🫁</div>
+            <h3>Radiografía de Tórax</h3>
+            <p>📅 Fecha: 2026-03-05</p>
+            <p style="color: #4ade80;"><strong>Estado:</strong> Disponible</p>
+            <p style="color: #94a3b8; font-size: 13px; margin-top: 15px;">
+                Laboratorio: Rayos X
+            </p>
+            <button class="card-btn" style="margin-top: 15px;">📥 Descargar PDF</button>
+        </div>
+        
+        <div class="card">
+            <div class="card-icon" style="font-size: 40px;">🧪</div>
+            <h3>Examen de Orina</h3>
+            <p>📅 Fecha: 2026-02-28</p>
+            <p style="color: #4ade80;"><strong>Estado:</strong> Disponible</p>
+            <p style="color: #94a3b8; font-size: 13px; margin-top: 15px;">
+                Laboratorio: Laboratorio Central
+            </p>
+            <button class="card-btn" style="margin-top: 15px;">📥 Descargar PDF</button>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('dashboard') }}" class="btn-secondary">← Volver al Dashboard</a>
+    </div>
+</section>
+{% endblock %}

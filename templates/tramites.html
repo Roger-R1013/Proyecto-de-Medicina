@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Trámites{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 160px;">
+    <div class="section-header">
+        <h1>📝 Nuestros <span>Trámites</span></h1>
+        <p>Realiza tus trámites médicos de forma digital</p>
+    </div>
+    
+    <div class="cards-grid">
+        <div class="card">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <h3>Transcripción de incapacidad</h3>
+            <p>Solicita la transcripción de incapacidad médica fácilmente.</p>
+            {% if session.get('usuario_id') %}
+                <form method="POST" style="margin-top: 15px;">
+                    <input type="hidden" name="tipo_tramite" value="Transcripción de incapacidad">
+                    <button type="submit" class="card-btn">Solicitar</button>
+                </form>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="card-btn" style="margin-top: 15px;">Inicia sesión para solicitar</a>
+            {% endif %}
+        </div>
+        
+        <div class="card">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+            </div>
+            <h3>Solicitud de historial clínico</h3>
+            <p>Solicita tu historia clínica digital de manera rápida.</p>
+            {% if session.get('usuario_id') %}
+                <form method="POST" style="margin-top: 15px;">
+                    <input type="hidden" name="tipo_tramite" value="Historial clínico">
+                    <button type="submit" class="card-btn">Solicitar</button>
+                </form>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="card-btn" style="margin-top: 15px;">Inicia sesión para solicitar</a>
+            {% endif %}
+        </div>
+        
+        <div class="card">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h3>Certificado médico</h3>
+            <p>Obtén tu certificado médico digital.</p>
+            {% if session.get('usuario_id') %}
+                <form method="POST" style="margin-top: 15px;">
+                    <input type="hidden" name="tipo_tramite" value="Certificado médico">
+                    <button type="submit" class="card-btn">Solicitar</button>
+                </form>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="card-btn" style="margin-top: 15px;">Inicia sesión para solicitar</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if tramites %}
+    <div style="margin-top: 60px;">
+        <h2 style="color: #f1f5f9; text-align: center; margin-bottom: 30px;">📋 Mis Trámites Solicitados</h2>
+        <div class="cards-grid">
+            {% for tramite in tramites %}
+            <div class="card">
+                <div class="card-icon" style="font-size: 40px;">📋</div>
+                <h3>{{ tramite.tipo }}</h3>
+                <p>📅 Fecha: {{ tramite.fecha_solicitud[:10] if tramite.fecha_solicitud else 'N/A' }}</p>
+                <p style="color: #fbbf24;"><strong>Estado:</strong> {{ tramite.estado }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('dashboard') }}" class="btn-secondary">← Volver al Dashboard</a>
+    </div>
+</section>
+{% endblock %}

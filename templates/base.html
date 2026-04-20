@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Salud Friendly{% endblock %} 🇧🇴</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; min-height: 100vh; }
+        .bolivia-flag { width: 24px; height: 16px; display: inline-flex; flex-direction: column; border-radius: 2px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.2); margin-left: 8px; vertical-align: middle; }
+        .bolivia-flag .stripe-red { background: #E52E2A; height: 33.33%; width: 100%; }
+        .bolivia-flag .stripe-yellow { background: #F9E22E; height: 33.33%; width: 100%; }
+        .bolivia-flag .stripe-green { background: #007934; height: 33.33%; width: 100%; }
+        header { background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px); position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(59, 130, 246, 0.2); }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4); }
+        .logo-icon svg { width: 28px; height: 28px; fill: white; }
+        .logo-text { font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; }
+        nav { display: flex; align-items: center; gap: 8px; }
+        nav a { text-decoration: none; color: #e2e8f0; font-weight: 500; padding: 10px 20px; border-radius: 12px; transition: all 0.3s ease; }
+        nav a:hover { color: #60a5fa; background: rgba(59, 130, 246, 0.15); }
+        .btn-login { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white !important; padding: 12px 24px !important; border-radius: 12px; font-weight: 600; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4); transition: all 0.3s ease; }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(59, 130, 246, 0.5); }
+        .flash-messages { margin: 100px auto 20px; max-width: 1400px; padding: 0 50px; }
+        .flash-message { padding: 15px 20px; border-radius: 12px; margin-bottom: 10px; font-weight: 500; }
+        .flash-success { background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #4ade80; }
+        .flash-error { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; }
+        .flash-warning { background: rgba(249, 115, 22, 0.2); border: 1px solid #f97316; color: #fb923c; }
+        footer { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 60px 50px 30px; border-top: 1px solid rgba(59, 130, 246, 0.15); margin-top: 60px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 50px; margin-bottom: 40px; }
+        .footer-brand h3 { font-size: 24px; font-weight: 700; margin-bottom: 15px; background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .footer-brand p { color: #94a3b8; font-size: 14px; line-height: 1.7; }
+        .footer-links h4 { font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #f1f5f9; }
+        .footer-links a { display: block; color: #94a3b8; text-decoration: none; font-size: 14px; margin-bottom: 12px; transition: color 0.3s ease; }
+        .footer-links a:hover { color: #60a5fa; }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: #64748b; font-size: 14px; }
+        .auth-section { padding: 160px 20px 80px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .auth-card { background: rgba(30, 41, 59, 0.95); padding: 40px; border-radius: 24px; width: 100%; max-width: 400px; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .auth-header { text-align: center; margin-bottom: 30px; }
+        .auth-header h1 { color: #f1f5f9; margin-bottom: 10px; }
+        .auth-header p { color: #94a3b8; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: #e2e8f0; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group select, textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(15, 23, 42, 0.5); color: #e2e8f0; font-size: 15px; }
+        .form-group input:focus, .form-group select:focus, textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        .btn-auth, .btn-primary { width: 100%; padding: 16px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; text-align: center; }
+        .btn-auth:hover, .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4); }
+        .auth-footer { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; }
+        .auth-footer a { color: #60a5fa; text-decoration: none; font-weight: 600; }
+        .auth-footer a:hover { text-decoration: underline; }
+        .section { padding: 80px 50px; max-width: 1400px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h1, .section-header h2 { font-size: 36px; font-weight: 700; color: #f1f5f9; margin-bottom: 15px; }
+        .section-header h1 span, .section-header h2 span { background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-header p { color: #94a3b8; font-size: 18px; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .card { background: rgba(30, 41, 59, 0.85); padding: 30px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4); transition: all 0.3s ease; border: 1px solid rgba(59, 130, 246, 0.15); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
+        .card-icon { width: 70px; height: 70px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(96, 165, 250, 0.25) 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .card-icon svg { width: 35px; height: 35px; stroke: #60a5fa; fill: none; stroke-width: 1.5; }
+        .card h3 { font-size: 20px; color: #f1f5f9; margin-bottom: 12px; font-weight: 600; }
+        .card p { color: #94a3b8; font-size: 15px; line-height: 1.6; margin-bottom: 20px; }
+        .card-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 12px 24px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; text-align: center; }
+        .card-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4); }
+        .btn-secondary { background: transparent; color: #60a5fa; padding: 16px 32px; border: 2px solid #3b82f6; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn-secondary:hover { border-color: #60a5fa; background: rgba(59, 130, 246, 0.15); }
+        .dashboard-section { padding: 160px 50px 80px; max-width: 1400px; margin: 0 auto; }
+        .dashboard-header { margin-bottom: 40px; }
+        .dashboard-header h1 { color: #f1f5f9; font-size: 36px; margin-bottom: 10px; }
+        .dashboard-header p { color: #94a3b8; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .dashboard-card { background: rgba(30, 41, 59, 0.85); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid rgba(59, 130, 246, 0.15); }
+        .dashboard-card .card-icon { font-size: 40px; margin-bottom: 15px; }
+        .dashboard-card h3 { color: #f1f5f9; margin-bottom: 10px; font-size: 18px; }
+        .stat-number { font-size: 36px; font-weight: 700; color: #60a5fa; margin-bottom: 5px; }
+        .stat-label { color: #94a3b8; margin-bottom: 15px; }
+        .card-link { color: #3b82f6; text-decoration: none; font-weight: 600; }
+        .dashboard-actions { display: flex; gap: 15px; }
+        .doctors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .doctor-card { background: rgba(30, 41, 59, 0.85); padding: 30px; border-radius: 24px; text-align: center; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4); transition: all 0.3s ease; border: 1px solid rgba(59, 130, 246, 0.15); }
+        .doctor-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
+        .doctor-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid #3b82f6; }
+        .doctor-card h4 { font-size: 20px; color: #f1f5f9; margin-bottom: 8px; font-weight: 600; }
+        .doctor-card .specialty { color: #60a5fa; font-size: 14px; font-weight: 500; margin-bottom: 15px; }
+        .rating { display: flex; align-items: center; justify-content: center; gap: 5px; color: #94a3b8; font-size: 14px; }
+        .stars { color: #fbbf24; }
+        .stats-section { background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%); padding: 80px 50px; margin: 60px 0; border-radius: 30px; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .stat-card { background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(96, 165, 250, 0.25) 100%); padding: 40px 30px; border-radius: 24px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .stat-icon { font-size: 40px; margin-bottom: 15px; }
+        .stat-card h3 { font-size: 42px; font-weight: 700; color: white; margin-bottom: 8px; }
+        .stat-card p { color: rgba(255, 255, 255, 0.85); font-size: 16px; }
+        .hero { padding: 160px 50px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1400px; margin: 0 auto; }
+        .hero-content h1 { font-size: 48px; font-weight: 700; color: #f1f5f9; line-height: 1.2; margin-bottom: 20px; }
+        .hero-content h1 span { background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-content p { font-size: 18px; color: #94a3b8; margin-bottom: 30px; line-height: 1.7; }
+        .hero-buttons { display: flex; gap: 15px; margin-bottom: 40px; }
+        .trust-badges { display: flex; align-items: center; gap: 20px; }
+        .badge { background: rgba(30, 41, 59, 0.9); padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); font-size: 14px; color: #e2e8f0; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .badge strong { color: #60a5fa; }
+        .hero-image { position: relative; }
+        .hero-image img { width: 100%; border-radius: 30px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6); border: 1px solid rgba(59, 130, 246, 0.15); }
+        .floating-card { position: absolute; background: rgba(30, 41, 59, 0.95); padding: 20px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 15px; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .floating-card.top { top: -20px; right: -20px; }
+        .floating-card.bottom { bottom: 30px; left: -30px; }
+        .floating-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; }
+        .floating-icon svg { width: 24px; height: 24px; stroke: white; fill: none; }
+        .floating-card h4 { font-size: 14px; color: #f1f5f9; margin-bottom: 3px; }
+        .floating-card p { font-size: 12px; color: #94a3b8; }
+        @media (max-width: 1024px) {
+            header { padding: 15px 30px; }
+            .hero { grid-template-columns: 1fr; text-align: center; padding: 140px 30px 60px; }
+            .hero-buttons { justify-content: center; }
+            .trust-badges { justify-content: center; }
+            .hero-image { order: -1; }
+            .floating-card { display: none; }
+            .section { padding: 60px 30px; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            nav { display: none; }
+            .hero-content h1 { font-size: 32px; }
+            .hero-buttons { flex-direction: column; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+            .stats-section { padding: 60px 30px; }
+        }
+        /* 🔥 SOLO PARA SELECCIÓN PACIENTE/MÉDICO */
+        .auth-card .btn-secondary.btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+            color: white !important;
+            border: none !important;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}" class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            <span class="logo-text">Salud Friendly 
+                <div class="bolivia-flag">
+                    <div class="stripe-red"></div>
+                    <div class="stripe-yellow"></div>
+                    <div class="stripe-green"></div>
+                </div>
+            </span>
+        </a>
+        <nav>
+            <a href="{{ url_for('index') }}">Inicio</a>
+            <a href="{{ url_for('atencion') }}">Atención</a>
+            <a href="{{ url_for('tramites') }}">Trámites</a>
+            <a href="{{ url_for('doctores') }}">Doctores</a>
+            <a href="{{ url_for('contacto') }}">Contacto</a>
+            {% if session.get('usuario_id') %}
+                <a href="{{ url_for('dashboard') }}" style="background: rgba(59, 130, 246, 0.1);">Dashboard</a>
+                <a href="{{ url_for('perfil') }}">Perfil</a>
+                <a href="{{ url_for('logout') }}" class="btn-login">Cerrar Sesión</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn-login">Iniciar Sesión</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Salud Friendly 🇧🇴</h3>
+                <p>Tu plataforma digital de salud en Bolivia.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Servicios</h4>
+                <a href="#">Citas médicas</a>
+                <a href="#">Resultados</a>
+                <a href="#">Directorio</a>
+            </div>
+            <div class="footer-links">
+                <h4>Empresa</h4>
+                <a href="#">Sobre nosotros</a>
+                <a href="#">Contacto</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Salud Friendly - Ingeniería de Sistemas UNIFRANZ.</p>
+        </div>
+    </footer>
+</body>
+</html>

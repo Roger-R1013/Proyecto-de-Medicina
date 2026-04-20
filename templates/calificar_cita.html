@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Calificar Cita{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 160px;">
+    <div class="section-header">
+        <h1>⭐ Calificar <span>Atención</span></h1>
+        <p>Tu opinión nos ayuda a mejorar</p>
+    </div>
+    
+    <div style="max-width: 600px; margin: 0 auto;">
+        <div class="card" style="padding: 40px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 60px; margin-bottom: 15px;">👨‍️</div>
+                <h2 style="color: #f1f5f9; margin-bottom: 10px;">{{ cita.doctor }}</h2>
+                <p style="color: #60a5fa;">{{ cita.especialidad }}</p>
+                <p style="color: #94a3b8; margin-top: 15px;">📅 {{ cita.fecha }} - ⏰ {{ cita.hora }}</p>
+            </div>
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label style="color: #f1f5f9; font-size: 16px; display: block; margin-bottom: 15px; text-align: center;">¿Cómo calificarías la atención recibida?</label>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <input type="radio" name="calificacion" value="5" id="star5" required style="display: none;">
+                        <label for="star5" style="font-size: 40px; cursor: pointer; color: #94a3b8;">⭐</label>
+                        
+                        <input type="radio" name="calificacion" value="4" id="star4" style="display: none;">
+                        <label for="star4" style="font-size: 40px; cursor: pointer; color: #94a3b8;">⭐</label>
+                        
+                        <input type="radio" name="calificacion" value="3" id="star3" style="display: none;">
+                        <label for="star3" style="font-size: 40px; cursor: pointer; color: #94a3b8;">⭐</label>
+                        
+                        <input type="radio" name="calificacion" value="2" id="star2" style="display: none;">
+                        <label for="star2" style="font-size: 40px; cursor: pointer; color: #94a3b8;">⭐</label>
+                        
+                        <input type="radio" name="calificacion" value="1" id="star1" style="display: none;">
+                        <label for="star1" style="font-size: 40px; cursor: pointer; color: #94a3b8;">⭐</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="comentario" style="color: #e2e8f0; display: block; margin-bottom: 8px;">Comentario (opcional)</label>
+                    <textarea id="comentario" name="comentario" rows="4" placeholder="Cuéntanos sobre tu experiencia..." style="width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(15, 23, 42, 0.5); color: #e2e8f0; font-size: 15px; font-family: 'Poppins', sans-serif;"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px;">Enviar Calificación</button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="{{ url_for('mis_citas') }}" style="color: #94a3b8; text-decoration: none;">← Volver a mis citas</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Script para mostrar estrellas seleccionadas
+        document.querySelectorAll('input[name="calificacion"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const value = parseInt(this.value);
+                document.querySelectorAll('label[for^="star"]').forEach((label, index) => {
+                    label.style.color = index < value ? '#fbbf24' : '#94a3b8';
+                });
+            });
+        });
+    </script>
+</section>
+{% endblock %}

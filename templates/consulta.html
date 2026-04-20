@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <h2>Registrar Consulta</h2>
+
+    <form method="POST">
+        <textarea name="diagnostico" placeholder="Diagnóstico" required></textarea>
+        <textarea name="recomendaciones" placeholder="Recomendaciones" required></textarea>
+
+        <button type="submit" class="btn-primary">Guardar</button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Médico{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 160px;">
+    
+    <!-- HEADER -->
+    <div class="section-header">
+        <h1>👨‍⚕️ Panel <span>Médico</span></h1>
+        <p>Gestiona tu agenda diaria de consultas</p>
+    </div>
+
+    {% if citas %}
+    <div class="cards-grid">
+        {% for cita in citas %}
+        <div class="card">
+
+            <!-- ICONO -->
+            <div class="card-icon" style="font-size: 40px;">🩺</div>
+
+            <!-- INFO -->
+            <h3>{{ cita.doctor }}</h3>
+            <p style="color: #60a5fa;">Paciente ID: {{ cita.usuario_id }}</p>
+            <p>📅 {{ cita.fecha }}</p>
+            <p>⏰ {{ cita.hora }}</p>
+
+            <!-- ESTADO -->
+            <p style="color: #fbbf24; margin-top: 10px;">
+                <strong>Estado:</strong> {{ cita.estado }}
+            </p>
+
+            <!-- BOTÓN -->
+            <a href="{{ url_for('consulta', cita_id=cita.id) }}" 
+               class="card-btn" 
+               style="margin-top: 15px;">
+               🩺 Atender Consulta
+            </a>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- SIN CITAS -->
+    <div style="text-align: center; padding: 60px 20px;">
+        <div style="font-size: 80px; margin-bottom: 20px;">📅</div>
+        <h2 style="color: #f1f5f9; margin-bottom: 15px;">No tienes citas hoy</h2>
+        <p style="color: #94a3b8;">Tu agenda está libre por ahora</p>
+    </div>
+    {% endif %}
+
+    <!-- BOTÓN VOLVER -->
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('logout') }}" class="btn-secondary">Cerrar Sesión</a>
+    </div>
+
+</section>
+{% endblock %}

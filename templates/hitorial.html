@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Historial Clínico{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 160px;">
+    <div class="section-header">
+        <h1>📋 Mi <span>Historial Clínico</span></h1>
+        <p>Accede a tu historial de consultas y tratamientos</p>
+    </div>
+    
+    <div class="cards-grid">
+        <div class="card">
+            <div class="card-icon" style="font-size: 40px;">🩺</div>
+            <h3>Consulta General</h3>
+            <p>📅 Fecha: 2026-02-15</p>
+            <p style="color: #60a5fa;">Dr. Carlos Méndez - Cardiólogo</p>
+            <p style="color: #94a3b8; font-size: 13px; margin-top: 15px;">
+                <strong>Diagnóstico:</strong> Control rutinario
+            </p>
+            <button class="card-btn" style="margin-top: 15px;">📄 Ver Detalles</button>
+        </div>
+        
+        <div class="card">
+            <div class="card-icon" style="font-size: 40px;">💉</div>
+            <h3>Vacunación</h3>
+            <p>📅 Fecha: 2026-01-20</p>
+            <p style="color: #60a5fa;">Dra. Laura Torrez - Pediatra</p>
+            <p style="color: #94a3b8; font-size: 13px; margin-top: 15px;">
+                <strong>Vacuna:</strong> Influenza Estacional
+            </p>
+            <button class="card-btn" style="margin-top: 15px;">📄 Ver Detalles</button>
+        </div>
+        
+        <div class="card">
+            <div class="card-icon" style="font-size: 40px;">🔬</div>
+            <h3>Exámenes de Laboratorio</h3>
+            <p>📅 Fecha: 2026-03-05</p>
+            <p style="color: #60a5fa;">Laboratorio Central</p>
+            <p style="color: #94a3b8; font-size: 13px; margin-top: 15px;">
+                <strong>Tipo:</strong> Hemograma Completo
+            </p>
+            <button class="card-btn" style="margin-top: 15px;">📄 Ver Resultados</button>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('dashboard') }}" class="btn-secondary">← Volver al Dashboard</a>
+    </div>
+</section>
+{% endblock %}

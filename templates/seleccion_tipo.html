@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section" style="text-align:center; padding-top:150px;">
+    <h1>Selecciona tipo de usuario</h1>
+
+    <a href="{{ url_for('registro') }}" class="btn-primary">👤 Paciente</a>
+    <a href="{{ url_for('registro') }}" class="btn-secondary">👨‍⚕️ Médico</a>
+</section>
+{% endblock %}

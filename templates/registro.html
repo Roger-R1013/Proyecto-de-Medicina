@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>📝 Crear Cuenta</h1>
+            <p>Regístrate gratis</p>
+        </div>
+
+        <!-- Selección tipo -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button type="button" onclick="seleccionarTipo('paciente')" id="btnPaciente" class="btn-secondary" style="flex:1;">
+                👤 Paciente
+            </button>
+            <button type="button" onclick="seleccionarTipo('medico')" id="btnMedico" class="btn-secondary" style="flex:1;">
+                👨‍⚕️ Médico
+            </button>
+        </div>
+
+        <form method="POST">
+            <input type="hidden" id="tipo_usuario" name="tipo_usuario" value="paciente">
+
+            <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+
+            <!-- 🔥 CAMPOS PACIENTE -->
+            <div id="camposPaciente">
+
+                <div class="form-group">
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" name="fecha_nacimiento">
+                </div>
+
+                <div class="form-group">
+                    <label>CI</label>
+                    <input type="text" name="ci">
+                </div>
+
+                <div class="form-group">
+                    <label>Celular</label>
+                    <input type="text" name="celular">
+                </div>
+
+                <div class="form-group">
+                    <label>Alergias</label>
+                    <input type="text" name="alergias">
+                </div>
+
+                <div class="form-group">
+                    <label>Grupo Sanguíneo</label>
+                    <select name="grupo_sanguineo">
+                        <option value="">Seleccionar</option>
+                        <option>A+</option>
+                        <option>A-</option>
+                        <option>B+</option>
+                        <option>B-</option>
+                        <option>AB+</option>
+                        <option>AB-</option>
+                        <option>O+</option>
+                        <option>O-</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- 🔥 CAMPOS MÉDICO -->
+            <div class="form-group" id="campoEspecialidad" style="display:none;">
+                <label>Especialidad</label>
+                <input type="text" name="especialidad">
+            </div>
+
+            <div class="form-group" id="campoMatricula" style="display:none;">
+                <label>Matrícula Profesional</label>
+                <input type="text" name="matricula">
+            </div>
+
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label>Confirmar Contraseña</label>
+                <input type="password" name="confirmar_password" required>
+            </div>
+
+            <button type="submit" class="btn-auth">Crear Cuenta</button>
+        </form>
+
+        <div class="auth-footer">
+            ¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Inicia sesión</a>
+        </div>
+    </div>
+</section>
+
+<script>
+function seleccionarTipo(tipo) {
+    document.getElementById('tipo_usuario').value = tipo;
+
+    const btnPaciente = document.getElementById('btnPaciente');
+    const btnMedico = document.getElementById('btnMedico');
+
+    const campoEspecialidad = document.getElementById('campoEspecialidad');
+    const campoMatricula = document.getElementById('campoMatricula');
+    const camposPaciente = document.getElementById('camposPaciente');
+
+    if (tipo === 'medico') {
+        btnMedico.classList.add('btn-primary');
+        btnPaciente.classList.remove('btn-primary');
+
+        campoEspecialidad.style.display = 'block';
+        campoMatricula.style.display = 'block';
+        camposPaciente.style.display = 'none';
+
+    } else {
+        btnPaciente.classList.add('btn-primary');
+        btnMedico.classList.remove('btn-primary');
+
+        campoEspecialidad.style.display = 'none';
+        campoMatricula.style.display = 'none';
+        camposPaciente.style.display = 'block';
+    }
+}
+
+seleccionarTipo('paciente');
+</script>
+
+{% endblock %}
