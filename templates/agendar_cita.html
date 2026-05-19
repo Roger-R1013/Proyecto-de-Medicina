@@ -1,55 +1,72 @@
 {% extends 'base.html' %}
-
 {% block title %}Agendar Cita{% endblock %}
-
 {% block content %}
+
 <section class="auth-section">
-    <div class="auth-card">
-        <div class="auth-header">
-            <h1>📅 Agendar Cita</h1>
-            <p>Selecciona doctor y horario</p>
-        </div>
-        <form method="POST">
-            <div class="form-group">
-                <label for="doctor">Doctor</label>
-                <select id="doctor" name="doctor" required>
-                    <option value="">-- Selecciona --</option>
-                    <option value="Dr. Carlos Méndez">Dr. Carlos Méndez</option>
-                    <option value="Dra. Laura Torrez">Dra. Laura Torrez</option>
-                    <option value="Dr. Miguel Ramos">Dr. Miguel Ramos</option>
-                    <option value="Dra. Ana Ruiz">Dra. Ana Ruiz</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="especialidad">Especialidad</label>
-                <select id="especialidad" name="especialidad" required>
-                    <option value="">-- Selecciona --</option>
-                    <option value="Cardiólogo">Cardiología</option>
-                    <option value="Pediatra">Pediatría</option>
-                    <option value="Dermatólogo">Dermatología</option>
-                    <option value="Neurólogo">Neurología</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="fecha">Fecha</label>
-                <input type="date" id="fecha" name="fecha" required>
-            </div>
-            <div class="form-group">
-                <label for="hora">Hora</label>
-                <select id="hora" name="hora" required>
-                    <option value="">-- Selecciona --</option>
-                    <option value="08:00 AM">08:00 AM</option>
-                    <option value="09:00 AM">09:00 AM</option>
-                    <option value="10:00 AM">10:00 AM</option>
-                    <option value="02:00 PM">02:00 PM</option>
-                    <option value="03:00 PM">03:00 PM</option>
-                </select>
-            </div>
-            <button type="submit" class="btn-auth">Confirmar Cita</button>
-        </form>
-        <div class="auth-footer">
-            <a href="{{ url_for('dashboard') }}">← Volver al Dashboard</a>
-        </div>
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>📅 Agendar Cita</h1>
+      <p>Seleccioná doctor y horario</p>
     </div>
+
+    <form method="POST">
+
+      <div class="form-group">
+        <label for="doctor">Médico</label>
+        <select id="doctor" name="doctor" required onchange="autoEspecialidad(this)">
+          <option value="">-- Seleccioná un médico --</option>
+          {% for m in medicos %}
+          <option value="{{ m.nombre }}" data-especialidad="{{ m.especialidad or '' }}">
+            {{ m.nombre }} — {{ m.especialidad or 'General' }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="especialidad">Especialidad</label>
+        <input type="text" id="especialidad" name="especialidad"
+               placeholder="Se completa al elegir médico"
+               readonly required
+               style="background:#1e293b; color:#94a3b8; cursor:not-allowed;">
+      </div>
+
+      <div class="form-group">
+        <label for="fecha">Fecha</label>
+        <input type="date" id="fecha" name="fecha" required
+               min="{{ hoy if hoy else '' }}">
+      </div>
+
+      <div class="form-group">
+        <label for="hora">Hora</label>
+        <select id="hora" name="hora" required>
+          <option value="">-- Seleccioná --</option>
+          <option value="08:00">08:00 AM</option>
+          <option value="09:00">09:00 AM</option>
+          <option value="10:00">10:00 AM</option>
+          <option value="11:00">11:00 AM</option>
+          <option value="14:00">02:00 PM</option>
+          <option value="15:00">03:00 PM</option>
+          <option value="16:00">04:00 PM</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-auth">Enviar solicitud</button>
+
+    </form>
+
+    <div class="auth-footer">
+      <a href="{{ url_for('dashboard') }}">← Volver al Dashboard</a>
+    </div>
+  </div>
 </section>
+
+<script>
+function autoEspecialidad(select) {
+  const option = select.options[select.selectedIndex];
+  const esp = option.getAttribute('data-especialidad') || '';
+  document.getElementById('especialidad').value = esp;
+}
+</script>
+
 {% endblock %}
