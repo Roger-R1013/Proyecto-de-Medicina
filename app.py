@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import sqlite3
+import os
 from datetime import datetime
 
 app = Flask(__name__)
@@ -8,7 +9,12 @@ app.config['SECRET_KEY'] = 'salud-friendly-2026-unifranz'
 # ==================== BASE DE DATOS ====================
 
 def get_db():
-    conn = sqlite3.connect('salud.db')
+    db_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        'salud.db'
+    )
+
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
