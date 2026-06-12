@@ -60,10 +60,12 @@
       {% for cita in citas_pendientes %}
       <div style="background:#1e293b; border:1px solid #7c2d12; border-radius:12px; padding:1rem 1.25rem; display:flex; align-items:center; gap:16px;">
 
+        <!-- Avatar -->
         <div style="width:44px;height:44px;border-radius:50%;background:#7c2d12;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fdba74;font-size:14px;flex-shrink:0;">
           {{ cita.nombre_paciente[:2].upper() }}
         </div>
 
+        <!-- Info paciente -->
         <div style="flex:1; min-width:0;">
           <p style="color:#f1f5f9; font-size:15px; font-weight:600; margin:0 0 3px;">
             {{ cita.nombre_paciente }}
@@ -73,21 +75,36 @@
           </p>
         </div>
 
+        <!-- Badge estado -->
         <span style="background:#451a03;color:#fb923c;font-size:12px;padding:4px 12px;border-radius:8px;white-space:nowrap;">
           ⏳ Pendiente
         </span>
 
-        <!-- BOTONES CONFIRMAR / RECHAZAR -->
-        <form method="POST" action="{{ url_for('confirmar_cita', cita_id=cita.id) }}" style="display:flex; gap:8px;">
+        <!-- BOTONES CONFIRMAR / RECHAZAR CON MOTIVO -->
+        <form method="POST" action="{{ url_for('confirmar_cita', cita_id=cita.id) }}"
+              style="display:flex; flex-direction:column; gap:6px; align-items:flex-end; min-width:220px;">
+
+          <!-- Botón confirmar -->
           <button name="accion" value="confirmar" type="submit"
-            style="background:#16a34a;color:white;font-size:13px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:500;white-space:nowrap;">
-            ✓ Confirmar
+            style="width:100%; background:#16a34a;color:white;font-size:13px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:500;">
+            ✓ Confirmar cita
           </button>
-          <button name="accion" value="rechazar" type="submit"
-            style="background:#991b1b;color:white;font-size:13px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:500;white-space:nowrap;"
-            onclick="return confirm('¿Seguro que querés rechazar esta cita?')">
-            ✕ Rechazar
-          </button>
+
+          <!-- Select motivo + botón rechazar -->
+          <div style="display:flex; gap:6px; width:100%;">
+            <select name="motivo_rechazo"
+              style="flex:1; background:#0f172a; color:#f1f5f9; border:1px solid #7c2d12; border-radius:8px; font-size:12px; padding:6px 8px; cursor:pointer; outline:none;">
+              <option value="Horario no disponible">⏰ Horario no disponible</option>
+              <option value="Doctor fuera de la ciudad">✈️ Doctor fuera de la ciudad</option>
+              <option value="Especialidad no corresponde">🩺 Especialidad no corresponde</option>
+              <option value="Cupo completo para esa fecha">📅 Cupo completo para esa fecha</option>
+            </select>
+            <button name="accion" value="rechazar" type="submit"
+              style="background:#991b1b;color:white;font-size:13px;padding:7px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:500;white-space:nowrap;">
+              ✕ Rechazar
+            </button>
+          </div>
+
         </form>
 
       </div>

@@ -165,6 +165,12 @@ def login():
                 conn.close()
                 return render_template('login.html')
 
+            # Validación extra: CI solo debe contener números
+            if not ci.isdigit():
+                flash('❌ El número de carnet solo debe contener números', 'error')
+                conn.close()
+                return render_template('login.html')
+
             cursor.execute('''
                 SELECT * FROM usuarios
                 WHERE ci = ? AND password = ? AND tipo = 'paciente'
@@ -249,7 +255,7 @@ def dashboard_medico():
     ''', (hoy, medico['nombre']))
     citas_hoy = cursor.fetchall()
 
-    # Citas pendientes de confirmación (cualquier fecha futura)
+    # Citas pendientes de confirmación (cualquier fecha)
     cursor.execute('''
         SELECT citas.*, usuarios.nombre AS nombre_paciente
         FROM citas
@@ -295,14 +301,20 @@ def confirmar_cita(cita_id):
 
     if accion == 'confirmar':
         nuevo_estado = 'Programada'
-        msg = '✅ Cita confirmada correctamente'
+        motivo       = None
+        msg          = '✅ Cita confirmada correctamente'
     else:
         nuevo_estado = 'Rechazada'
-        msg = '❌ Cita rechazada'
+        # Guarda el motivo seleccionado por el médico en el campo comentario
+        motivo = request.form.get('motivo_rechazo', 'Sin especificar')
+        msg    = f'❌ Cita rechazada: {motivo}'
 
     conn   = get_db()
     cursor = conn.cursor()
-    cursor.execute('UPDATE citas SET estado = ? WHERE id = ?', (nuevo_estado, cita_id))
+    cursor.execute(
+        'UPDATE citas SET estado = ?, comentario = ? WHERE id = ?',
+        (nuevo_estado, motivo, cita_id)
+    )
     conn.commit()
     conn.close()
 
@@ -400,6 +412,41 @@ def consulta(cita_id):
         return redirect(url_for('dashboard_medico'))
 
     return render_template('consulta.html', cita=cita)
+
+# ==================== CALIFICAR CITA ====================
+
+@app.route('/calificar_cita/<int:cita_id>', methods=['GET', 'POST'])
+def calificar_cita(cita_id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn   = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        calificacion = request.form.get('calificacion')
+        comentario   = request.form.get('comentario', '')
+
+        cursor.execute('''
+            UPDATE citas SET calificacion = ?, comentario = ?, estado = 'Calificada'
+            WHERE id = ? AND usuario_id = ?
+        ''', (calificacion, comentario, cita_id, session['usuario_id']))
+        conn.commit()
+        conn.close()
+
+        flash('✅ Calificación enviada, ¡gracias!', 'success')
+        return redirect(url_for('mis_citas'))
+
+    cursor.execute('SELECT * FROM citas WHERE id = ? AND usuario_id = ?',
+                   (cita_id, session['usuario_id']))
+    cita = cursor.fetchone()
+    conn.close()
+
+    if not cita:
+        flash('❌ Cita no encontrada', 'error')
+        return redirect(url_for('mis_citas'))
+
+    return render_template('calificar_cita.html', cita=cita)
 
 # ==================== TRÁMITES ====================
 

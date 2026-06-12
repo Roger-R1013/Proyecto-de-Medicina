@@ -3,72 +3,135 @@
 {% block title %}Mis Citas{% endblock %}
 
 {% block content %}
-<section class="section" style="padding-top: 160px;">
-    <div class="section-header">
-        <h1>Mis <span>Citas Programadas</span></h1>
-        <p>Revisa todas tus citas médicas agendadas</p>
-    </div>
-    
-    {% if citas %}
-    <div class="cards-grid">
-        {% for cita in citas %}
-        <div class="card">
-            <div class="card-icon" style="font-size: 40px;">📅</div>
-            <h3>{{ cita.doctor }}</h3>
-            <p style="color: #60a5fa; font-weight: 600;">{{ cita.especialidad }}</p>
-            <p>📅 Fecha: {{ cita.fecha }}</p>
-            <p>⏰ Hora: {{ cita.hora }}</p>
-            
-            {% if cita.estado == 'Programada' %}
-            <p style="color: #fbbf24; margin-top: 10px;">
-                <strong>Estado:</strong> {{ cita.estado }}
+
+<section class="section" style="padding-top: 160px; max-width: 900px; margin: 0 auto;">
+
+  <div class="section-header">
+    <h1>Mis <span>Citas Médicas</span></h1>
+    <p>Revisá el estado y resultados de tus consultas</p>
+  </div>
+
+  {% if citas %}
+  <div style="display:flex; flex-direction:column; gap:16px;">
+    {% for cita in citas %}
+
+      {% if cita.estado == 'Atendida' or cita.estado == 'Calificada' %}
+        <div style="background:#1e293b; border-radius:14px; padding:1.25rem; border-left:4px solid #34d399;">
+      {% elif cita.estado == 'Programada' %}
+        <div style="background:#1e293b; border-radius:14px; padding:1.25rem; border-left:4px solid #60a5fa;">
+      {% elif cita.estado == 'Pendiente confirmacion' %}
+        <div style="background:#1e293b; border-radius:14px; padding:1.25rem; border-left:4px solid #fb923c;">
+      {% elif cita.estado == 'Rechazada' %}
+        <div style="background:#1e293b; border-radius:14px; padding:1.25rem; border-left:4px solid #f87171;">
+      {% else %}
+        <div style="background:#1e293b; border-radius:14px; padding:1.25rem; border-left:4px solid #64748b;">
+      {% endif %}
+
+        <!-- FILA SUPERIOR -->
+        <div style="display:flex; align-items:center; gap:14px;">
+
+          <div style="width:48px;height:48px;border-radius:50%;background:#1e40af;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#bfdbfe;font-size:15px;flex-shrink:0;">
+            {{ cita.doctor[:2].upper() }}
+          </div>
+
+          <div style="flex:1; min-width:0;">
+            <p style="color:#f1f5f9; font-size:15px; font-weight:600; margin:0 0 3px;">{{ cita.doctor }}</p>
+            <p style="color:#60a5fa; font-size:13px; margin:0 0 3px;">{{ cita.especialidad }}</p>
+            <p style="color:#94a3b8; font-size:12px; margin:0;">
+              📅 {{ cita.fecha }} &nbsp;·&nbsp; ⏰ {{ cita.hora }}
             </p>
-            {% elif cita.estado == 'Calificada' %}
-            <p style="color: #4ade80; margin-top: 10px;">
-                <strong>Estado:</strong> {{ cita.estado }}
-            </p>
-            {% else %}
-            <p style="color: #60a5fa; margin-top: 10px;">
-                <strong>Estado:</strong> {{ cita.estado }}
-            </p>
-            {% endif %}
-            
-            {% if cita.calificacion %}
-            <div style="margin-top: 15px; padding: 10px; background: rgba(34, 197, 94, 0.1); border-radius: 10px;">
-                <p style="color: #fbbf24; font-size: 18px;">
-                    {% for i in range(cita.calificacion) %}⭐{% endfor %}
-                </p>
-                {% if cita.comentario %}
-                <p style="color: #94a3b8; font-size: 13px; margin-top: 5px;">"{{ cita.comentario }}"</p>
-                {% endif %}
-            </div>
-            {% else %}
-            {% if cita.fecha < '2026-04-06' %}
-            <a href="{{ url_for('calificar_cita', cita_id=cita.id) }}" class="card-btn" style="margin-top: 15px; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">⭐ Calificar Atención</a>
-            {% else %}
-            <p style="color: #94a3b8; font-size: 12px; margin-top: 15px;">Podrás calificar después de la fecha de tu cita</p>
-            {% endif %}
-            {% endif %}
-            
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(59, 130, 246, 0.2);">
-                <p style="font-size: 12px; color: #94a3b8;">
-                    Agendada el: {{ cita.fecha_creacion[:10] if cita.fecha_creacion else 'N/A' }}
-                </p>
-            </div>
+          </div>
+
+          <!-- BADGE ESTADO -->
+          {% if cita.estado == 'Atendida' or cita.estado == 'Calificada' %}
+            <span style="background:#064e3b;color:#34d399;font-size:12px;padding:5px 14px;border-radius:8px;white-space:nowrap;font-weight:500;">✓ Atendida</span>
+          {% elif cita.estado == 'Programada' %}
+            <span style="background:#172554;color:#60a5fa;font-size:12px;padding:5px 14px;border-radius:8px;white-space:nowrap;font-weight:500;">● Confirmada</span>
+          {% elif cita.estado == 'Pendiente confirmacion' %}
+            <span style="background:#431407;color:#fb923c;font-size:12px;padding:5px 14px;border-radius:8px;white-space:nowrap;font-weight:500;">⏳ Esperando confirmación</span>
+          {% elif cita.estado == 'Rechazada' %}
+            <span style="background:#450a0a;color:#f87171;font-size:12px;padding:5px 14px;border-radius:8px;white-space:nowrap;font-weight:500;">✕ Rechazada</span>
+          {% else %}
+            <span style="background:#1e293b;color:#94a3b8;font-size:12px;padding:5px 14px;border-radius:8px;white-space:nowrap;">{{ cita.estado }}</span>
+          {% endif %}
+
         </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div style="text-align: center; padding: 60px 20px;">
-        <div style="font-size: 80px; margin-bottom: 20px;">📅</div>
-        <h2 style="color: #f1f5f9; margin-bottom: 15px;">No tienes citas programadas</h2>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Agenda tu primera cita médica ahora</p>
-        <a href="{{ url_for('agendar_cita') }}" class="btn-primary">Agendar Cita</a>
-    </div>
-    {% endif %}
-    
-    <div style="text-align: center; margin-top: 40px;">
-        <a href="{{ url_for('dashboard') }}" class="btn-secondary">← Volver al Dashboard</a>
-    </div>
+
+        <!-- MOTIVO DE RECHAZO -->
+        {% if cita.estado == 'Rechazada' %}
+        <div style="margin-top:12px; background:#450a0a; border-radius:10px; padding:12px 16px; display:flex; align-items:center; gap:10px;">
+          <span style="font-size:18px;">❌</span>
+          <div>
+            <p style="color:#fca5a5; font-size:12px; margin:0 0 2px; font-weight:600;">Motivo del rechazo</p>
+            <p style="color:#f87171; font-size:14px; margin:0;">
+              {{ cita.comentario if cita.comentario else 'No se especificó un motivo' }}
+            </p>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- RESULTADOS DE CONSULTA -->
+        {% if cita.diagnostico %}
+        <div style="margin-top:1rem; border-top:1px solid #334155; padding-top:1rem; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="background:#0f172a; border-radius:10px; padding:12px;">
+            <p style="color:#64748b; font-size:11px; text-transform:uppercase; letter-spacing:.06em; margin:0 0 6px;">
+              🩺 Diagnóstico
+            </p>
+            <p style="color:#f1f5f9; font-size:14px; line-height:1.6; margin:0;">{{ cita.diagnostico }}</p>
+          </div>
+          <div style="background:#0f172a; border-radius:10px; padding:12px;">
+            <p style="color:#64748b; font-size:11px; text-transform:uppercase; letter-spacing:.06em; margin:0 0 6px;">
+              📋 Recomendaciones
+            </p>
+            <p style="color:#f1f5f9; font-size:14px; line-height:1.6; margin:0;">{{ cita.recomendaciones }}</p>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- CALIFICACIÓN -->
+        {% if cita.estado == 'Atendida' %}
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid #334155; display:flex; align-items:center; justify-content:space-between;">
+          {% if cita.calificacion %}
+          <div>
+            <p style="color:#64748b; font-size:11px; margin:0 0 4px;">Tu calificación</p>
+            <p style="font-size:18px; margin:0;">
+              {% for i in range(cita.calificacion) %}⭐{% endfor %}
+            </p>
+            {% if cita.comentario %}
+            <p style="color:#94a3b8; font-size:12px; margin:4px 0 0;">"{{ cita.comentario }}"</p>
+            {% endif %}
+          </div>
+          {% else %}
+          <p style="color:#94a3b8; font-size:13px; margin:0;">¿Cómo fue tu atención?</p>
+          <a href="{{ url_for('calificar_cita', cita_id=cita.id) }}"
+             style="background:#fbbf24;color:#0f172a;font-size:13px;font-weight:600;padding:7px 16px;border-radius:8px;text-decoration:none;white-space:nowrap;">
+            ⭐ Calificar atención
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- PIE -->
+        <p style="color:#475569; font-size:11px; margin:10px 0 0; text-align:right;">
+          Agendada el {{ cita.fecha_creacion[:10] if cita.fecha_creacion else 'N/A' }}
+        </p>
+
+      </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div style="text-align:center; padding:60px 20px;">
+    <div style="font-size:70px; margin-bottom:16px;">📅</div>
+    <h2 style="color:#f1f5f9; margin-bottom:10px;">No tenés citas aún</h2>
+    <p style="color:#94a3b8; margin-bottom:24px;">Agendá tu primera consulta médica</p>
+    <a href="{{ url_for('agendar_cita') }}" class="btn-primary">Agendar Cita</a>
+  </div>
+  {% endif %}
+
+  <div style="text-align:center; margin-top:2rem;">
+    <a href="{{ url_for('dashboard') }}" class="btn-secondary">← Volver al Dashboard</a>
+  </div>
+
 </section>
 {% endblock %}
