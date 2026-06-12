@@ -3,27 +3,36 @@
 {% block title %}Contacto{% endblock %}
 
 {% block content %}
+
+<style>
+@media (max-width: 768px) {
+    .contacto-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+
 <section class="section" style="padding-top: 160px;">
     <div class="section-header">
         <h1>📞 <span>Contacto</span></h1>
         <p>Comunícate con nosotros</p>
     </div>
-    
+
     <div style="max-width: 800px; margin: 0 auto;">
-        <div class="cards-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 40px;">
+        <div class="cards-grid contacto-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 40px;">
             <div class="card" style="text-align: center;">
                 <div style="font-size: 50px; margin-bottom: 15px;">📍</div>
                 <h3 style="color: #f1f5f9;">Ubicación</h3>
                 <p style="color: #94a3b8;">Universidad UNIFRANZ<br>Santa Cruz, Bolivia</p>
             </div>
-            
+
             <div class="card" style="text-align: center;">
                 <div style="font-size: 50px; margin-bottom: 15px;">📧</div>
                 <h3 style="color: #f1f5f9;">Email</h3>
-                <p style="color: #94a3b8;">contacto@saludfriendly.bo<br>soporte@saludfriendly.bo</p>
+                <p style="color: #94a3b8; word-break: break-all;">contacto@saludfriendly.bo<br>soporte@saludfriendly.bo</p>
             </div>
         </div>
-        
+
         <div class="card" style="padding: 40px;">
             <h2 style="color: #f1f5f9; text-align: center; margin-bottom: 30px;">Envíanos un Mensaje</h2>
             <form>
@@ -31,22 +40,22 @@
                     <label for="nombre">Nombre Completo</label>
                     <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required placeholder="tu@email.com">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="asunto">Asunto</label>
                     <input type="text" id="asunto" name="asunto" required placeholder="Motivo del contacto">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="mensaje">Mensaje</label>
                     <textarea id="mensaje" name="mensaje" rows="5" required placeholder="Escribe tu mensaje aquí..." style="width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(15, 23, 42, 0.5); color: #e2e8f0; font-size: 15px; font-family: 'Poppins', sans-serif;"></textarea>
                 </div>
-                
+
                 <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px;">Enviar Mensaje</button>
             </form>
         </div>
