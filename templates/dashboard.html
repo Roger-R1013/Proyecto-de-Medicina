@@ -3,12 +3,74 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+
+<style>
+/* ── MÓVIL ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+    .dashboard-section {
+        padding: 100px 16px 60px !important;
+    }
+
+    .dashboard-header h1 {
+        font-size: 22px !important;
+    }
+
+    /* 2 columnas en vez de 4 */
+    .dashboard-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+    }
+
+    .dashboard-card {
+        padding: 18px 14px !important;
+    }
+
+    .dashboard-card .card-icon {
+        font-size: 28px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .dashboard-card h3 {
+        font-size: 13px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .stat-number {
+        font-size: 28px !important;
+    }
+
+    .stat-label {
+        font-size: 11px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .card-link {
+        font-size: 12px !important;
+    }
+
+    /* Botones en columna, ancho completo */
+    .dashboard-actions {
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-top: 20px !important;
+    }
+
+    .dashboard-actions a {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 14px 20px !important;
+        font-size: 15px !important;
+    }
+}
+</style>
+
 <section class="dashboard-section">
     <div class="dashboard-header">
         <h1>👋 Bienvenido/a, {{ session.nombre }}</h1>
         <p>Panel de control de tu salud</p>
     </div>
-    
+
     <div class="dashboard-grid">
         <div class="dashboard-card">
             <div class="card-icon">📅</div>
@@ -39,7 +101,7 @@
             <a href="{{ url_for('tramites') }}" class="card-link">Gestionar →</a>
         </div>
     </div>
-    
+
     <div class="dashboard-actions" style="justify-content: center; gap: 15px; margin-top: 30px;">
         <a href="{{ url_for('agendar_cita') }}" class="btn-primary" style="padding: 12px 28px; font-size: 15px; width: auto;">
             📅 Agendar Cita
@@ -49,4 +111,5 @@
         </a>
     </div>
 </section>
-{% endblock %}                                   
+
+{% endblock %}

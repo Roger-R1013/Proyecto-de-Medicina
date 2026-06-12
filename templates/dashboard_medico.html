@@ -2,10 +2,71 @@
 {% block title %}Dashboard Médico{% endblock %}
 {% block content %}
 
-<section class="section" style="padding-top: 140px; max-width: 900px; margin: 0 auto;">
+<style>
+/* ── MÓVIL ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+    /* Sección principal */
+    .dm-section {
+        padding: 100px 16px 60px !important;
+        max-width: 100% !important;
+    }
+
+    /* Header: apila en vez de separar */
+    .dm-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+
+    .dm-header h1 {
+        font-size: 22px !important;
+    }
+
+    /* Stats: 2 columnas */
+    .dm-stats {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+    }
+
+    /* Tarjeta de cita pendiente: apila verticalmente */
+    .dm-cita-pendiente {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+
+    .dm-cita-pendiente .dm-form {
+        width: 100% !important;
+        min-width: unset !important;
+    }
+
+    /* Tarjeta de cita hoy: apila info y botón */
+    .dm-cita-hoy {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    .dm-cita-hoy .dm-btn-atender {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    /* Rechazar: select + botón en columna */
+    .dm-rechazar-row {
+        flex-direction: column !important;
+    }
+
+    .dm-rechazar-row select {
+        width: 100% !important;
+    }
+}
+</style>
+
+<section class="section dm-section" style="padding-top: 140px; max-width: 900px; margin: 0 auto;">
 
   <!-- HEADER -->
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+  <div class="dm-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
     <div>
       <p style="color:#94a3b8; font-size:14px; margin:0 0 4px;">Hoy, {{ hoy }}</p>
       <h1 style="color:#f1f5f9; font-size:26px; margin:0;">
@@ -24,7 +85,7 @@
   </div>
 
   <!-- ESTADÍSTICAS -->
-  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:2rem;">
+  <div class="dm-stats" style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:2rem;">
     <div style="background:#1e293b; border-radius:12px; padding:1rem; text-align:center;">
       <p style="color:#94a3b8; font-size:12px; margin:0 0 6px;">Citas hoy</p>
       <p style="color:#f1f5f9; font-size:28px; font-weight:bold; margin:0;">{{ citas_hoy|length }}</p>
@@ -43,14 +104,11 @@
     </div>
   </div>
 
-  <!-- ============ SECCIÓN: POR CONFIRMAR ============ -->
+  <!-- SOLICITUDES POR CONFIRMAR -->
   {% if citas_pendientes %}
   <div style="margin-bottom:2rem;">
-
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
-      <h2 style="color:#f1f5f9; font-size:16px; font-weight:600; margin:0;">
-        Solicitudes por confirmar
-      </h2>
+      <h2 style="color:#f1f5f9; font-size:16px; font-weight:600; margin:0;">Solicitudes por confirmar</h2>
       <span style="background:#7c2d12; color:#fb923c; font-size:12px; font-weight:bold; padding:2px 10px; border-radius:20px;">
         {{ pendientes_count }}
       </span>
@@ -58,40 +116,30 @@
 
     <div style="display:flex; flex-direction:column; gap:10px;">
       {% for cita in citas_pendientes %}
-      <div style="background:#1e293b; border:1px solid #7c2d12; border-radius:12px; padding:1rem 1.25rem; display:flex; align-items:center; gap:16px;">
+      <div class="dm-cita-pendiente" style="background:#1e293b; border:1px solid #7c2d12; border-radius:12px; padding:1rem 1.25rem; display:flex; align-items:center; gap:16px;">
 
-        <!-- Avatar -->
         <div style="width:44px;height:44px;border-radius:50%;background:#7c2d12;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fdba74;font-size:14px;flex-shrink:0;">
           {{ cita.nombre_paciente[:2].upper() }}
         </div>
 
-        <!-- Info paciente -->
         <div style="flex:1; min-width:0;">
-          <p style="color:#f1f5f9; font-size:15px; font-weight:600; margin:0 0 3px;">
-            {{ cita.nombre_paciente }}
-          </p>
+          <p style="color:#f1f5f9; font-size:15px; font-weight:600; margin:0 0 3px;">{{ cita.nombre_paciente }}</p>
           <p style="color:#94a3b8; font-size:13px; margin:0;">
             📅 {{ cita.fecha }} &nbsp;·&nbsp; ⏰ {{ cita.hora }} &nbsp;·&nbsp; {{ cita.especialidad }}
           </p>
         </div>
 
-        <!-- Badge estado -->
         <span style="background:#451a03;color:#fb923c;font-size:12px;padding:4px 12px;border-radius:8px;white-space:nowrap;">
           ⏳ Pendiente
         </span>
 
-        <!-- BOTONES CONFIRMAR / RECHAZAR CON MOTIVO -->
-        <form method="POST" action="{{ url_for('confirmar_cita', cita_id=cita.id) }}"
+        <form class="dm-form" method="POST" action="{{ url_for('confirmar_cita', cita_id=cita.id) }}"
               style="display:flex; flex-direction:column; gap:6px; align-items:flex-end; min-width:220px;">
-
-          <!-- Botón confirmar -->
           <button name="accion" value="confirmar" type="submit"
             style="width:100%; background:#16a34a;color:white;font-size:13px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:500;">
             ✓ Confirmar cita
           </button>
-
-          <!-- Select motivo + botón rechazar -->
-          <div style="display:flex; gap:6px; width:100%;">
+          <div class="dm-rechazar-row" style="display:flex; gap:6px; width:100%;">
             <select name="motivo_rechazo"
               style="flex:1; background:#0f172a; color:#f1f5f9; border:1px solid #7c2d12; border-radius:8px; font-size:12px; padding:6px 8px; cursor:pointer; outline:none;">
               <option value="Horario no disponible">⏰ Horario no disponible</option>
@@ -104,7 +152,6 @@
               ✕ Rechazar
             </button>
           </div>
-
         </form>
 
       </div>
@@ -113,25 +160,21 @@
   </div>
   {% endif %}
 
-  <!-- ============ SECCIÓN: CITAS DE HOY ============ -->
+  <!-- AGENDA DE HOY -->
   <div>
-    <h2 style="color:#f1f5f9; font-size:16px; font-weight:600; margin:0 0 1rem;">
-      Agenda de hoy
-    </h2>
+    <h2 style="color:#f1f5f9; font-size:16px; font-weight:600; margin:0 0 1rem;">Agenda de hoy</h2>
 
     {% if citas_hoy %}
     <div style="display:flex; flex-direction:column; gap:10px;">
       {% for cita in citas_hoy %}
-      <div style="background:#1e293b; border-radius:12px; padding:1rem 1.25rem; display:flex; align-items:center; gap:16px;">
+      <div class="dm-cita-hoy" style="background:#1e293b; border-radius:12px; padding:1rem 1.25rem; display:flex; align-items:center; gap:16px;">
 
         <div style="width:44px;height:44px;border-radius:50%;background:#1e40af;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#bfdbfe;font-size:14px;flex-shrink:0;">
           {{ cita.nombre_paciente[:2].upper() }}
         </div>
 
         <div style="flex:1; min-width:0;">
-          <p style="color:#f1f5f9; font-size:15px; font-weight:600; margin:0 0 3px;">
-            {{ cita.nombre_paciente }}
-          </p>
+          <p style="color:#f1f5f9; font-size:15px; font-weight:600; margin:0 0 3px;">{{ cita.nombre_paciente }}</p>
           <p style="color:#94a3b8; font-size:13px; margin:0;">
             ⏰ {{ cita.hora }} &nbsp;·&nbsp; {{ cita.especialidad }}
           </p>
@@ -144,12 +187,12 @@
         {% endif %}
 
         {% if cita.estado != 'Atendida' %}
-        <a href="{{ url_for('consulta', cita_id=cita.id) }}"
+        <a class="dm-btn-atender" href="{{ url_for('consulta', cita_id=cita.id) }}"
            style="background:#2563eb;color:white;font-size:13px;padding:7px 16px;border-radius:8px;text-decoration:none;white-space:nowrap;font-weight:500;">
           🩺 Atender
         </a>
         {% else %}
-        <a href="{{ url_for('consulta', cita_id=cita.id) }}"
+        <a class="dm-btn-atender" href="{{ url_for('consulta', cita_id=cita.id) }}"
            style="background:transparent;color:#94a3b8;font-size:13px;padding:7px 16px;border-radius:8px;text-decoration:none;white-space:nowrap;border:1px solid #334155;">
           Ver consulta
         </a>
