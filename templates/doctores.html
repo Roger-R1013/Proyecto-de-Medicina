@@ -27,9 +27,9 @@
         </div>
         
         <div class="doctor-card">
-            <img src="{{ url_for('static', filename='img/doctores/Ceci.jpg') }}" alt="Dra. Ceci Davila" class="doctor-img">
-            <h4>Dra. Ceci Davila</h4>
-            <p class="specialty">Anestesiología</p>
+            <img src="{{ url_for('static', filename='img/doctores/Adriana.jpg') }}" alt="Dra. Adriana Yance" class="doctor-img">
+            <h4>Dra. Adriana Yance</h4>
+            <p class="specialty">Otorrinolaringología</p>
             <div class="rating">
                 <span class="stars">★★★★★</span>
                 <span>4.8</span>
@@ -48,7 +48,7 @@
             <p class="specialty">Dermatología</p>
             <div class="rating">
                 <span class="stars">★★★★★</span>
-                <span>4.9</span>
+                <span>4.7</span>
             </div>
             <p style="color: #4ade80; font-size: 13px; margin-bottom: 15px;">✓ Disponible</p>
             {% if session.get('usuario_id') %}
@@ -59,12 +59,12 @@
         </div>
         
         <div class="doctor-card">
-            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Dra. Ana Ruiz" class="doctor-img">
-            <h4>Dra. Ana Ruiz</h4>
-            <p class="specialty">Neurología</p>
+            <img src="{{ url_for('static', filename='img/doctores/Ceci.jpg') }}" alt="Dra. Ceci Davila" class="doctor-img">
+            <h4>Dra. Ceci Davila</h4>
+            <p class="specialty">Anestesiología</p>
             <div class="rating">
                 <span class="stars">★★★★★</span>
-                <span>4.7</span>
+                <span>4.8</span>
             </div>
             <p style="color: #4ade80; font-size: 13px; margin-bottom: 15px;">✓ Disponible</p>
             {% if session.get('usuario_id') %}
